@@ -6,10 +6,10 @@
 # link: https://en.wikipedia.org/wiki/Tower_of_Hanoi
 ######################################################
 .data
-	input:    .asciiz "Enter the number of disks: "
-	alert:    .asciiz "The number is supposed to be between 1 and 9!"
+    input:    .asciiz "Enter the number of disks: "
+    alert:    .asciiz "The number is supposed to be between 1 and 9!"
     newline:  .asciiz "\n"
-	arrow:    .asciiz " -> "
+    arrow:    .asciiz " -> "
 	
 # Prints the string given as a parameter
 # to the standart output.
@@ -38,16 +38,19 @@
                           # the appropriate register
 .end_macro
 
+# Exit of the program.
 .macro exit
-    li $v0, 10
-    syscall
+    li      $v0, 10       # end of the program
+    syscall               # call the system function
 .end_macro
 
+# Prints out one move of the disks
+# from rod d1 to rod d2.
 .macro print_move($d1, $d2)
-    print_req($d1)
-    print_str(arrow)
-    print_req($d2)
-    print_str(newline)
+    print_req($d1)        # print the first rod
+    print_str(arrow)      # print the arrow " -> "  
+    print_req($d2)        # print the second rod
+    print_str(newline)    # print a new line
 .end_macro
 
 .macro push($n, $p1, $p2, $p3)
