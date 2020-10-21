@@ -6,10 +6,10 @@
 # link: https://en.wikipedia.org/wiki/Tower_of_Hanoi
 ######################################################
 .data
-    input:    .asciiz "Enter the number of disks: "
+	input:    .asciiz "Enter the number of disks: "
     alert:    .asciiz "The number is supposed to be between 1 and 9!"
     newline:  .asciiz "\n"
-    arrow:    .asciiz " -> "
+	arrow:    .asciiz " -> "
 	
 # Prints the string given as a parameter
 # to the standart output.
@@ -53,24 +53,36 @@
     print_str(newline)    # print a new line
 .end_macro
 
+# Pushes data onto the stack.
+# n  - number of disks
+# p1 - rod number 1
+# p2 - rod number 2
+# p3 - rot number 3
 .macro push($n, $p1, $p2, $p3)
-    sub $sp, $sp, 16
-    sw $n, 12($sp)
-    sw $p1, 8($sp)
-    sw $p2, 4($sp)
-    sw $p3, 0($sp)
+    sub     $sp, $sp, 16  # "allocate" 16B on the stack
+    sw      $n, 12($sp)   # store the number of disks
+    sw      $p1, 8($sp)   # store rode number 1
+    sw      $p2, 4($sp)   # store rode number 2
+    sw      $p3, 0($sp)   # store rode number 3
 .end_macro
 
+# Pops all data - number of disks along
+# with all the rods from the stack.
+# It also stores the return address to
+# register ra
 .macro pop_all()
-    lw $ra, 0($sp)
-    addi $sp, $sp, 20	
+    lw      $ra, 0($sp)
+    addi    $sp, $sp, 20	
 .end_macro
 
+# Reads data - number of disks along
+# with all the rods from the stack
+# (it does not delete them).
 .macro read($n, $p1, $p2, $p3)	
-    lw $p3, 4($sp)
-    lw $p2, 8($sp)
-    lw $p1, 12($sp)
-    lw $n, 16($sp)
+    lw      $p3, 4($sp)     # load rod number 3
+    lw      $p2, 8($sp)     # load rod number 2
+    lw      $p1, 12($sp)    # load rod number 1
+    lw      $n, 16($sp)     # load number of disks
 .end_macro
 
 .text
