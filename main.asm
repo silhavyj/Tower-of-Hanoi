@@ -6,10 +6,10 @@
 # link: https://en.wikipedia.org/wiki/Tower_of_Hanoi
 ######################################################
 .data
-	input:    .asciiz "Enter the number of disks: "
+    input:    .asciiz "Enter the number of disks: "
     alert:    .asciiz "The number is supposed to be between 1 and 9!"
     newline:  .asciiz "\n"
-	arrow:    .asciiz " -> "
+    arrow:    .asciiz " -> "
 	
 # Prints the string given as a parameter
 # to the standart output.
@@ -72,7 +72,7 @@
 # register ra
 .macro pop_all()
     lw      $ra, 0($sp)   # store the return address into ra
-    addi    $sp, $sp, 20  #	move the stack pointer by 20B
+    addi    $sp, $sp, 20  # move the stack pointer by 20B
 .end_macro
 
 # Reads data - number of disks along
@@ -86,44 +86,45 @@
 .end_macro
 
 .text
-	.global mian
-	main:
-		print_str(input)  # encourage the user to enter the input
-		read_int($t2)     # read the number of disks
+    .global mian
+    main:
+	print_str(input)  # encourage the user to enter the input
+	read_int($t2)     # read the number of disks
 
-		li      $t6, 9          # max number of disks = 9
-		bgt     $t2, $t6, err   # if number of disks > 9 -> jump err
-		bgtz    $t2, run        # if number of disks > 0 -> jump run
-	err:
-		print_str(alert)  # print out the error msg for the user
-		exit              # terminate the program	
-	run:
-		li      $t3, 1    # store the first rode (num 1) to register t3
-		li      $t4, 2    # store the first rode (num 2) to register t4
-		li      $t5, 3    # store the first rode (num 3) to register t5
+	li      $t6, 9          # max number of disks = 9
+	bgt     $t2, $t6, err   # if number of disks > 9 -> jump err
+	bgtz    $t2, run        # if number of disks > 0 -> jump run
+    err:
+	print_str(alert)  # print out the error msg for the user
+	exit              # terminate the program	
+    run:
+	li      $t3, 1    # store the first rode (num 1) to register t3
+	li      $t4, 2    # store the first rode (num 2) to register t4
+	li      $t5, 3    # store the first rode (num 3) to register t5
         li      $t6, 1    # value used to terminate the recursion (n == 1)
 
-		push($t2, $t3, $t4, $t5) # store the rods on the stack		
-		jal     hanoi            # call the hanoi function
-		exit
+	push($t2, $t3, $t4, $t5) # store the rods on the stack		
+	jal     hanoi            # call the hanoi function
+	exit
 	
-	hanoi:	
-		sub     $sp, $sp, 4   # reserve 4B on the stack for the return address
-		sw      $ra, 0($sp)   # store the return address on the stack   
+    hanoi:	
+	sub     $sp, $sp, 4   # reserve 4B on the stack for the return address
+	sw      $ra, 0($sp)   # store the return address on the stack   
 		
-		read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
-		beq     $t2, $t6, return  # if n == 1 -> return
-		addi    $t2, $t2, -1      # n = n - 1 
-		push($t2, $t3, $t5, $t4)  # store the data on the stack
-		jal     hanoi             # recursively call the same function  
+	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
+	beq     $t2, $t6, return  # if n == 1 -> return
+	addi    $t2, $t2, -1      # n = n - 1 
+	push($t2, $t3, $t5, $t4)  # store the data on the stack
+	jal     hanoi             # recursively call the same function  
 		
-		print_move($t3, $t4)      # print one move of a disk  
-		
-		read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
-		addi    $t2, $t2, -1      # n = n - 1   
-		push($t2, $t5, $t4, $t3)  # store the data on the stack
-		jal     hanoi             # recursively call the same function  
+	print_move($t3, $t4)      # print one move of a disk  
 	
-	return:
-		pop_all()    # pop all the date from the stack
-		jr      $ra  # return from the function
+	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
+	addi    $t2, $t2, -1      # n = n - 1   
+	push($t2, $t5, $t4, $t3)  # store the data on the stack
+	jal     hanoi             # recursively call the same function  
+	
+    return:
+	pop_all()    # pop all the date from the stack
+	jr      $ra  # return from the function
+	
