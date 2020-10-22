@@ -111,11 +111,11 @@
 	sub     $sp, $sp, 4   # reserve 4B on the stack for the return address
 	sw      $ra, 0($sp)   # store the return address on the stack   
 		
-	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
-	beq     $t2, $t6, return  # if n == 1 -> return
-	addi    $t2, $t2, -1      # n = n - 1 
-	push($t2, $t3, $t5, $t4)  # store the data on the stack
-	jal     hanoi             # recursively call the same function  
+	read($t2, $t3, $t4, $t5)     # read the data (number of disks, ...) from the stock
+	beq     $t2, $t6, print_ret  # if n == 1 -> print_ret
+	addi    $t2, $t2, -1         # n = n - 1 
+	push($t2, $t3, $t5, $t4)     # store the data on the stack
+	jal     hanoi                # recursively call the same function  
 		
 	print_move($t3, $t4)      # print one move of a disk  
 	
@@ -123,8 +123,11 @@
 	addi    $t2, $t2, -1      # n = n - 1   
 	push($t2, $t5, $t4, $t3)  # store the data on the stack
 	jal     hanoi             # recursively call the same function  
+	j return	
+    
+    print_ret:
+	print_move($t3, $t4)      # print one move of a disk  
 	
     return:
 	pop_all()    # pop all the date from the stack
 	jr      $ra  # return from the function
-	
