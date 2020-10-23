@@ -118,7 +118,7 @@
 	jal     hanoi                # recursively call the same function  
 		
 	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
-	li    $t2, 1      	  # n = n - 1   
+	li    $t2, 1      	  # n = 1   
 	push($t2, $t3, $t4, $t5)  # store the data on the stack
 	jal     hanoi             # recursively call the same function  
 	
