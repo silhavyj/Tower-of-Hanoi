@@ -96,7 +96,9 @@
 	bgtz    $t2, run        # if number of disks > 0 -> jump run
     err:
 	print_str(alert)  # print out the error msg for the user
-	exit              # terminate the program	
+	print_str(newline)
+	#exit              # terminate the program
+	j main	
     run:
 	li      $t3, 1    # store the first rode (num 1) to register t3
 	li      $t4, 2    # store the first rode (num 2) to register t4
@@ -105,24 +107,25 @@
 
 	push($t2, $t3, $t4, $t5) # store the rods on the stack		
 	jal     hanoi            # call the hanoi function
-	exit
+	j main
+	#exit
 	
     hanoi:	
 	sub     $sp, $sp, 4   # reserve 4B on the stack for the return address
 	sw      $ra, 0($sp)   # store the return address on the stack   
 		
-	read($t2, $t3, $t4, $t5)     # read the data (number of disks, ...) from the stock
+	read($t2, $t3, $t4, $t5)     # read the data (number of disks, ...) from the stack
 	beq     $t2, $t6, print_ret  # if n == 1 -> print_ret
 	addi    $t2, $t2, -1         # n = n - 1 
 	push($t2, $t3, $t5, $t4)     # store the data on the stack
 	jal     hanoi                # recursively call the same function  
 		
-	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
+	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stack
 	li    $t2, 1      	  # n = 1   
 	push($t2, $t3, $t4, $t5)  # store the data on the stack
 	jal     hanoi             # recursively call the same function  
 	
-	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stock
+	read($t2, $t3, $t4, $t5)  # read the data (number of disks, ...) from the stack
 	addi    $t2, $t2, -1      # n = n - 1   
 	push($t2, $t5, $t4, $t3)  # store the data on the stack
 	jal     hanoi             # recursively call the same function  
@@ -134,3 +137,4 @@
     return:
 	pop_all()    # pop all the date from the stack
 	jr      $ra  # return from the function
+	
